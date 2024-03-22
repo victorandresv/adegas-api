@@ -2,9 +2,7 @@ package adegas.fago.controllers;
 
 import adegas.fago.helpers.QRCodesHelper;
 import adegas.fago.interfaces.UserRepository;
-import adegas.fago.models.GenKeyCollection;
 import adegas.fago.models.GenKeyDto;
-import adegas.fago.models.StockCollection;
 import adegas.fago.models.UserCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
