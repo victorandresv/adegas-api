@@ -2,7 +2,6 @@ package adegas.fago.controllers;
 
 import adegas.fago.interfaces.JailRepository;
 import adegas.fago.models.JailCollection;
-import adegas.fago.models.PriceCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
