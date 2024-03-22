@@ -10,8 +10,12 @@ public class CompanyCollection {
     private String name;
     private String companyId;
 
-    public String getCompany_id() {
+    public String getCompanyId() {
         return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
     }
 
     public String getID() {
@@ -22,9 +26,6 @@ public class CompanyCollection {
         return name;
     }
 
-    public void setCompany_id(String companyId) {
-        this.companyId = companyId;
-    }
 
     public void setID(String ID) {
         this.ID = ID;
