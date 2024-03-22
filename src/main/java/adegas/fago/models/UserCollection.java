@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class UserCollection {
     @Id
     private String ID;
+    private String companyId;
     private boolean isWorking;
     private LastLocationModel lastLatLng;
     private String name;
@@ -59,5 +60,13 @@ public class UserCollection {
 
     public String getID() {
         return ID;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
     }
 }

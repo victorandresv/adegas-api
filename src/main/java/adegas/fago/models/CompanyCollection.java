@@ -8,10 +8,10 @@ public class CompanyCollection {
     @Id
     private String ID;
     private String name;
-    private String company_id;
+    private String companyId;
 
     public String getCompany_id() {
-        return company_id;
+        return companyId;
     }
 
     public String getID() {
@@ -22,8 +22,8 @@ public class CompanyCollection {
         return name;
     }
 
-    public void setCompany_id(String company_id) {
-        this.company_id = company_id;
+    public void setCompany_id(String companyId) {
+        this.companyId = companyId;
     }
 
     public void setID(String ID) {
@@ -32,14 +32,5 @@ public class CompanyCollection {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "CompanyCollection{" +
-                "ID='" + ID + '\'' +
-                ", name='" + name + '\'' +
-                ", company_id='" + company_id + '\'' +
-                '}';
     }
 }
