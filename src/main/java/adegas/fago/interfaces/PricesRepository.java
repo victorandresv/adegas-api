@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 public interface PricesRepository extends MongoRepository<PriceCollection, String> {
-    @Query(value = "{'companyId': ?0}")
+    @Query(value = "{'companyId': ?0}", sort = "{'timestamp': -1}}")
     List<PriceCollection> findByCompanyId(String companyId);
 }
