@@ -1,8 +1,12 @@
 package adegas.fago.controllers;
 
 import adegas.fago.helpers.QRCodesHelper;
+import adegas.fago.interfaces.UserRepository;
 import adegas.fago.models.GenKeyCollection;
 import adegas.fago.models.GenKeyDto;
+import adegas.fago.models.StockCollection;
+import adegas.fago.models.UserCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,33 +20,46 @@ import java.util.Base64;
 @RestController
 public class GenKeyController {
 
+    @Autowired
+    private UserRepository repository;
+
     @GetMapping("/gen-key/{companyId}/{phone}")
     public ResponseEntity<GenKeyDto> Generate(@PathVariable String companyId, @PathVariable String phone){
-        try {
-            KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
-            keyPairGen.initialize(2048);
-            KeyPair pair = keyPairGen.generateKeyPair();
-            GenKeyCollection genKeyCollection = new GenKeyCollection();
-            genKeyCollection.setCompanyId(companyId);
-            genKeyCollection.setUserId("1234567890");
 
-            Base64.Encoder encoder = Base64.getEncoder();
-            String publicKey = encoder.encodeToString(pair.getPublic().getEncoded());
-            String privateKey = encoder.encodeToString(pair.getPrivate().getEncoded());
+        if(!companyId.isEmpty() && !phone.isEmpty()){
+            UserCollection user = repository.findByCompanyIdAndPhone(companyId, phone);
 
-            genKeyCollection.setPublicKey(publicKey);
-            genKeyCollection.setPrivateKey(privateKey);
+            String key = "";
+            if(user.getPublicKey() != null){
+                key = user.getPublicKey();
+            } else {
+                try {
+                    KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
+                    keyPairGen.initialize(2048);
+                    KeyPair pair = keyPairGen.generateKeyPair();
+                    Base64.Encoder encoder = Base64.getEncoder();
+                    String publicKey = encoder.encodeToString(pair.getPublic().getEncoded());
+                    String privateKey = encoder.encodeToString(pair.getPrivate().getEncoded());
 
-            String base64Image = QRCodesHelper.GenerateAztec(publicKey);
+                    user.setPrivateKey(privateKey);
+                    user.setPublicKey(publicKey);
 
-            GenKeyDto GenKeyDto = new GenKeyDto();
-            GenKeyDto.setQrCode(base64Image);
+                    repository.save(user);
 
-            return new ResponseEntity<>(GenKeyDto, HttpStatus.OK);
-        } catch (Exception err) {
-            System.out.println(err.getMessage());
+                    key = publicKey;
+                } catch (Exception ignored) { }
+            }
+            if(!key.isEmpty()){
+                String base64Image = QRCodesHelper.GenerateAztec(key);
+                GenKeyDto GenKeyDto = new GenKeyDto();
+                GenKeyDto.setQrCode(base64Image);
+                return new ResponseEntity<>(GenKeyDto, HttpStatus.OK);
+            }
+
         }
-        return new ResponseEntity<>(null, HttpStatus.OK);
+
+        return new ResponseEntity<>(new GenKeyDto(), HttpStatus.OK);
+
     }
 
 }
