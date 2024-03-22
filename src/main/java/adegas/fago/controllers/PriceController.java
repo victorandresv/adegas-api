@@ -5,9 +5,10 @@ import adegas.fago.models.PriceCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class PriceController {
@@ -19,5 +20,11 @@ public class PriceController {
     public ResponseEntity<PriceCollection> Create(@RequestBody PriceCollection payload){
         repository.save(payload);
         return new ResponseEntity<>(payload, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/prices/{companyId}")
+    public ResponseEntity<List<PriceCollection>> Find(@PathVariable String companyId){
+        List<PriceCollection> list = repository.findByCompanyId(companyId);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
