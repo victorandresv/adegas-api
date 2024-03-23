@@ -50,7 +50,7 @@ public class SigninController {
         if(!companyId.isEmpty() && !phone.isEmpty()){
             UserCollection user = repository.findByCompanyIdAndPhone(companyId, phone);
 
-            String jwtString = GenKeyHelper.GetJsonWebToken(user.getPrivateKey(), user.getID(), user.getCompanyId(), 10);
+            String jwtString = GenKeyHelper.GetJsonWebToken(user.getPrivateKey(), user.getID(), user.getCompanyId(), 60*12);
 
             GenKeyDto genKeyDto = new GenKeyDto();
             genKeyDto.setJwt(jwtString);
