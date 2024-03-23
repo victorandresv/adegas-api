@@ -24,6 +24,15 @@ public class HttpInterceptors implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+        String ZenoAuthToken = request.getHeader("ZenoAuthToken");
+        if(ZenoAuthToken != null){
+            String ZENO_AUTH_TOKEN = System.getenv("ZENO_AUTH_TOKEN");
+            if(ZENO_AUTH_TOKEN.equals(ZenoAuthToken)){
+                return HandlerInterceptor.super.preHandle(request, response, handler);
+            }
+        }
+
         String jwt = request.getHeader("Authorization");
         if(jwt == null){
             response.setStatus(401);
