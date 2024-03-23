@@ -1,5 +1,7 @@
 package adegas.fago.helpers;
 
+import adegas.fago.interfaces.KeysRepository;
+import adegas.fago.models.KeysCollection;
 import io.jsonwebtoken.Jwts;
 import org.json.JSONObject;
 
@@ -82,6 +84,35 @@ public class GenKeyHelper {
             System.out.println(err.getMessage());
         }
         return null;
+    }
+
+    public static JSONObject VerifyJsonWebToken(String jwt, KeysRepository repository){
+        JSONObject jwtData = GenKeyHelper.DecodeDataFromJWT(jwt);
+        if(jwtData == null){
+            return null;
+        }
+
+        String oid = jwtData.getString("oid");
+        long exp = jwtData.getLong("exp");
+        if(oid.isEmpty()){
+            return null;
+        }
+
+        if(TimestampHelper.IsTimestampIsExpired(exp)){
+            return null;
+        }
+
+        KeysCollection user = repository.findOneByUserId(oid);
+        PublicKey publicKey = GenKeyHelper.GetPublicKey(user.getPublicKey());
+        try {
+            jwt = jwt.replace("Bearer", "");
+            jwt = jwt.trim();
+            Jwts.parser().verifyWith(publicKey).build().parse(jwt);
+
+            return jwtData;
+        } catch (Exception err){
+            return null;
+        }
     }
 
     public static String GenerateRandomPass(int length) {
