@@ -1,4 +1,4 @@
-package adegas.fago.controllers;
+package adegas.fago.models;
 
 public class ResponseModel {
     private boolean success;

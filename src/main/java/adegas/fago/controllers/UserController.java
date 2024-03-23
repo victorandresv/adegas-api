@@ -2,6 +2,7 @@ package adegas.fago.controllers;
 
 import adegas.fago.helpers.GenKeyHelper;
 import adegas.fago.interfaces.UserRepository;
+import adegas.fago.models.ResponseModel;
 import adegas.fago.models.UserCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
