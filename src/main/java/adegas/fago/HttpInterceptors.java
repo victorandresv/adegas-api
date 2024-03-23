@@ -2,7 +2,9 @@ package adegas.fago;
 
 import adegas.fago.helpers.GenKeyHelper;
 import adegas.fago.helpers.TimestampHelper;
+import adegas.fago.interfaces.KeysRepository;
 import adegas.fago.interfaces.UserRepository;
+import adegas.fago.models.KeysCollection;
 import adegas.fago.models.UserCollection;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +20,7 @@ import java.security.PublicKey;
 public class HttpInterceptors implements HandlerInterceptor {
 
     @Autowired
-    private UserRepository repository;
+    private KeysRepository repository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -46,7 +48,7 @@ public class HttpInterceptors implements HandlerInterceptor {
             return false;
         }
 
-        UserCollection user = repository.findOneById(oid);
+        KeysCollection user = repository.findOneByUserId(oid);
         PublicKey publicKey = GenKeyHelper.GetPublicKey(user.getPublicKey());
         try {
             jwt = jwt.replace("Bearer", "");

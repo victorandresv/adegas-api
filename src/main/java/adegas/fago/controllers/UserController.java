@@ -1,7 +1,9 @@
 package adegas.fago.controllers;
 
 import adegas.fago.helpers.GenKeyHelper;
+import adegas.fago.interfaces.KeysRepository;
 import adegas.fago.interfaces.UserRepository;
+import adegas.fago.models.KeysCollection;
 import adegas.fago.models.ResponseModel;
 import adegas.fago.models.UserCollection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class UserController {
 
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private KeysRepository keyRepository;
 
     @PostMapping(value="/users")
     public ResponseEntity<ResponseModel> Create(@RequestBody UserCollection payload){
@@ -29,17 +33,21 @@ public class UserController {
         UserCollection user = repository.findByCompanyIdAndPhone(payload.getCompanyId(), payload.getPhone());
         if(user == null){
 
+            repository.save(payload);
+            user = repository.findByCompanyIdAndPhone(payload.getCompanyId(), payload.getPhone());
+
             Map<String, Object> keys = GenKeyHelper.GenerateKeys();
             PublicKey publicKey = (PublicKey)keys.get("PublicKey");
             PrivateKey privateKey = (PrivateKey)keys.get("PrivateKey");
             String stringPublicKey = GenKeyHelper.GetBase64Key(publicKey);
             String stringPrivateKey = GenKeyHelper.GetBase64Key(privateKey);
-            payload.setPublicKey(stringPublicKey);
-            payload.setPrivateKey(stringPrivateKey);
 
-            repository.save(payload);
-            payload.setPrivateKey(null);
-            payload.setPublicKey(null);
+            KeysCollection keysCollection = new KeysCollection();
+            keysCollection.setUserId(user.getID());
+            keysCollection.setPublicKey(stringPublicKey);
+            keysCollection.setPrivateKey(stringPrivateKey);
+
+            keyRepository.save(keysCollection);
 
             response.setSuccess(true);
             response.setData(payload);

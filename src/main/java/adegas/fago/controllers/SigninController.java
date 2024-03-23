@@ -2,8 +2,10 @@ package adegas.fago.controllers;
 
 import adegas.fago.helpers.GenKeyHelper;
 import adegas.fago.helpers.QRCodesHelper;
+import adegas.fago.interfaces.KeysRepository;
 import adegas.fago.interfaces.UserRepository;
 import adegas.fago.models.GenKeyDto;
+import adegas.fago.models.KeysCollection;
 import adegas.fago.models.ResponseModel;
 import adegas.fago.models.UserCollection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,8 @@ public class SigninController {
 
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private KeysRepository keyRepository;
 
     @GetMapping("/generate-qr-code/{companyId}/{phone}")
     public ResponseEntity<ResponseModel> GenerateQrCode(@PathVariable String companyId, @PathVariable String phone){
@@ -25,7 +29,9 @@ public class SigninController {
         if(!companyId.isEmpty() && !phone.isEmpty()){
             UserCollection user = repository.findByCompanyIdAndPhone(companyId, phone);
 
-            String jwtString = GenKeyHelper.GetJsonWebToken(user.getPrivateKey(), user.getID(), user.getCompanyId(), 10);
+            KeysCollection keysCollection = keyRepository.findOneByUserId(user.getID());
+
+            String jwtString = GenKeyHelper.GetJsonWebToken(keysCollection.getPrivateKey(), user.getID(), user.getCompanyId(), 10);
 
             String base64Image = QRCodesHelper.GenerateAztec(jwtString);
 
@@ -50,7 +56,9 @@ public class SigninController {
         if(!companyId.isEmpty() && !phone.isEmpty()){
             UserCollection user = repository.findByCompanyIdAndPhone(companyId, phone);
 
-            String jwtString = GenKeyHelper.GetJsonWebToken(user.getPrivateKey(), user.getID(), user.getCompanyId(), 60*12);
+            KeysCollection keysCollection = keyRepository.findOneByUserId(user.getID());
+
+            String jwtString = GenKeyHelper.GetJsonWebToken(keysCollection.getPrivateKey(), user.getID(), user.getCompanyId(), 60*12);
 
             GenKeyDto genKeyDto = new GenKeyDto();
             genKeyDto.setJwt(jwtString);

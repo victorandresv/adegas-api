@@ -13,24 +13,6 @@ public class UserCollection {
     private String name;
     private String phone;
     private String rol;
-    private String publicKey;
-    private String privateKey;
-
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
-    }
-
-    public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey;
-    }
-
-    public String getPublicKey() {
-        return publicKey;
-    }
-
-    public String getPrivateKey() {
-        return privateKey;
-    }
 
     public void setName(String name) {
         this.name = name;
