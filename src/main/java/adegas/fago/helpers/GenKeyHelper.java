@@ -1,9 +1,11 @@
 package adegas.fago.helpers;
 
 import io.jsonwebtoken.Jwts;
+import org.json.JSONObject;
 
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.*;
 
 public class GenKeyHelper {
@@ -45,11 +47,26 @@ public class GenKeyHelper {
         return new String(jwt.getBytes());
     }
 
+    public static JSONObject DecodeDataFromJWT(String jwt){
+        try {
+            jwt = jwt.replace("Bearer", "");
+            jwt = jwt.trim();
+            String[] jwtArr = jwt.split("\\.");
+
+            byte[] decodedBytes = Base64.getDecoder().decode(jwtArr[1]);
+            String decodedString = new String(decodedBytes);
+
+            return new JSONObject(decodedString);
+        } catch (Exception ignored){
+            return null;
+        }
+    }
+
     public static PublicKey GetPublicKey(String b64key){
         try {
             KeyFactory kf = KeyFactory.getInstance("RSA");
-            PKCS8EncodedKeySpec keySpecPKCS8 = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(b64key));
-            return kf.generatePublic(keySpecPKCS8);
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(b64key));
+            return kf.generatePublic(keySpec);
         } catch (Exception err){
             System.out.println(err.getMessage());
         }
