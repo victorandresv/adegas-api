@@ -32,15 +32,23 @@ public class SigninController {
 
         if(!companyId.isEmpty() && !phone.isEmpty()){
 
+            boolean isZenoAuth = HeadersHelper.isZenoAuth(headers);
+
             String jwt = HeadersHelper.GetAccessTokenHeader(headers);
             JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository);
-            UserCollection admin = repository.findOneById(jsonObject.getString("oid"));
-            if(!admin.getRol().equals("admin")){
+            if(jsonObject == null && !isZenoAuth){
                 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             }
 
-            if(!admin.getCompanyId().equals(companyId)){
-                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            if(!isZenoAuth){
+                UserCollection admin = repository.findOneById(jsonObject.getString("oid"));
+                if(!admin.getRol().equals("admin")){
+                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+                }
+
+                if(!admin.getCompanyId().equals(companyId) && !isZenoAuth){
+                    return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+                }
             }
 
             UserCollection user = repository.findByCompanyIdAndPhone(companyId, phone);
