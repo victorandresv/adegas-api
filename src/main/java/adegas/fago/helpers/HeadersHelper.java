@@ -4,8 +4,6 @@ import adegas.fago.interfaces.KeysRepository;
 import adegas.fago.interfaces.UserRepository;
 import adegas.fago.models.UserCollection;
 import org.json.JSONObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
