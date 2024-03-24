@@ -1,6 +1,7 @@
 package adegas.fago.controllers;
 
 import adegas.fago.helpers.GenKeyHelper;
+import adegas.fago.helpers.HeadersHelper;
 import adegas.fago.helpers.QRCodesHelper;
 import adegas.fago.interfaces.KeysRepository;
 import adegas.fago.interfaces.UserRepository;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 public class SigninController {
@@ -28,9 +28,21 @@ public class SigninController {
     private KeysRepository keyRepository;
 
     @GetMapping("/auth/qr-code/{companyId}/{phone}")
-    public ResponseEntity<ResponseModel> AuthQrCode(@PathVariable String companyId, @PathVariable String phone){
+    public ResponseEntity<ResponseModel> AuthQrCode(@PathVariable String companyId, @PathVariable String phone, @RequestHeader Map<String, String> headers){
 
         if(!companyId.isEmpty() && !phone.isEmpty()){
+
+            String jwt = HeadersHelper.GetAccessTokenHeader(headers);
+            JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository);
+            UserCollection admin = repository.findOneById(jsonObject.getString("oid"));
+            if(!admin.getRol().equals("driver")){
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            }
+
+            if(!admin.getCompanyId().equals(companyId)){
+                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            }
+
             UserCollection user = repository.findByCompanyIdAndPhone(companyId, phone);
             if(user == null){
                 ResponseModel response = new ResponseModel();
@@ -87,18 +99,7 @@ public class SigninController {
     @GetMapping("/auth/access-token")
     public ResponseEntity<ResponseModel> AuthAccessToken(@RequestHeader Map<String, String> headers){
 
-        AtomicReference<String> bearerToken = new AtomicReference<>("");
-        headers.forEach((key, value) -> {
-            if(key.equals("authorization")){
-                bearerToken.set(value);
-            }
-        });
-
-        String jwt = bearerToken.get();
-        if(jwt == null){
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-        }
-
+        String jwt = HeadersHelper.GetAccessTokenHeader(headers);
         JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository);
         if(jsonObject == null){
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
