@@ -35,7 +35,7 @@ public class SigninController {
             String jwt = HeadersHelper.GetAccessTokenHeader(headers);
             JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository);
             UserCollection admin = repository.findOneById(jsonObject.getString("oid"));
-            if(!admin.getRol().equals("driver")){
+            if(!admin.getRol().equals("admin")){
                 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             }
 
