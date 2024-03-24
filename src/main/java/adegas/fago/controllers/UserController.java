@@ -1,6 +1,7 @@
 package adegas.fago.controllers;
 
 import adegas.fago.helpers.GenKeyHelper;
+import adegas.fago.helpers.HeadersHelper;
 import adegas.fago.interfaces.KeysRepository;
 import adegas.fago.interfaces.UserRepository;
 import adegas.fago.models.KeysCollection;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.PrivateKey;
@@ -26,9 +28,13 @@ public class UserController {
     private KeysRepository keyRepository;
 
     @PostMapping(value="/users")
-    public ResponseEntity<ResponseModel> Create(@RequestBody UserCollection payload){
+    public ResponseEntity<ResponseModel> Create(@RequestBody UserCollection payload, @RequestHeader Map<String, String> headers){
 
         ResponseModel response = new ResponseModel();
+
+        if(!HeadersHelper.LetAccessAdmin(headers, repository, keyRepository, payload.getCompanyId())){
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
 
         UserCollection user = repository.findByCompanyIdAndPhone(payload.getCompanyId(), payload.getPhone());
         if(user == null){

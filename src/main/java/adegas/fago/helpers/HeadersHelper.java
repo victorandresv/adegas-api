@@ -37,7 +37,7 @@ public class HeadersHelper {
         return false;
     }
 
-    public static boolean LetAccessIt(Map<String, String> headers, UserRepository repository, KeysRepository keyRepository, String companyId){
+    public static boolean LetAccessAdmin(Map<String, String> headers, UserRepository repository, KeysRepository keyRepository, String companyId){
         boolean isZenoAuth = HeadersHelper.isZenoAuth(headers);
 
         String jwt = HeadersHelper.GetAccessTokenHeader(headers);

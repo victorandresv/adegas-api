@@ -32,7 +32,7 @@ public class SigninController {
 
         if(!companyId.isEmpty() && !phone.isEmpty()){
 
-            if(!HeadersHelper.LetAccessIt(headers, repository, keyRepository, companyId)){
+            if(!HeadersHelper.LetAccessAdmin(headers, repository, keyRepository, companyId)){
                 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             }
 
