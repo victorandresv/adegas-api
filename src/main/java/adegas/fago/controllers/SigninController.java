@@ -46,7 +46,7 @@ public class SigninController {
             }
 
             KeysCollection keysCollection = keyRepository.findOneByUserId(user.getID());
-            String jwtString = GenKeyHelper.GetJsonWebToken(keysCollection.getPrivateKey(), user.getID(), user.getCompanyId(), 20);
+            String jwtString = GenKeyHelper.GetJsonWebToken(keysCollection.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 20);
             String base64Image = QRCodesHelper.GenerateAztec(jwtString);
 
             ResponseModel response = new ResponseModel();
@@ -75,7 +75,7 @@ public class SigninController {
             }
             KeysCollection keysCollection = keyRepository.findOneByUserId(user.getID());
 
-            String jwtString = GenKeyHelper.GetJsonWebToken(keysCollection.getPrivateKey(), user.getID(), user.getCompanyId(), 60*2);
+            String jwtString = GenKeyHelper.GetJsonWebToken(keysCollection.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*2);
 
             ResponseModel response = new ResponseModel();
             response.setSuccess(true);
@@ -100,7 +100,7 @@ public class SigninController {
 
         UserCollection user = repository.findOneById(jsonObject.getString("oid"));
         KeysCollection key = keyRepository.findOneByUserId(jsonObject.getString("oid"));
-        String jwtString = GenKeyHelper.GetJsonWebToken(key.getPrivateKey(), user.getID(), user.getCompanyId(), 60*2);
+        String jwtString = GenKeyHelper.GetJsonWebToken(key.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*2);
 
         ResponseModel response = new ResponseModel();
         response.setSuccess(true);
