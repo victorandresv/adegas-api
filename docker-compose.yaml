@@ -7,11 +7,13 @@ services:
     image: adegasapi
     networks:
       - default_network
+    restart: always
     ports:
-      - 8020:8020
+      - "8020:8020"
     environment:
       MONGO_DATABASE: adegasdata
       MONGO_URL_STRING_CONNECTION: <URI>
+      PORT: 8020
 
 networks:
   default_network:
