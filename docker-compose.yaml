@@ -10,8 +10,8 @@ services:
     ports:
       - 8020:8020
     environment:
+      MONGO_DATABASE: adegasdata
       MONGO_URL_STRING_CONNECTION: <URI>
-      MONGO_DATABASE: <NAME>
 
 networks:
   default_network:
