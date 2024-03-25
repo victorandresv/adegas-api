@@ -1,9 +1,10 @@
+  GNU nano 5.4                                                                                   deploy.sh                                                                                             
 #!/bin/bash
 
 OUTPUT=$(git pull origin main)
-if grep -q "Already up to date" OUTPUT then
-  echo "OK"
+SEARCH='Already up to date'
+if [[ "$OUTPUT" != *"$SEARCH"* ]]; then
+  ./gradlew build
+  docker build -t adegasapi .
+  docker-compose up -d
 fi
-#./gradlew build
-#docker build -t adegasapi .
-#docker-compose up -d
