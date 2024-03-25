@@ -7,4 +7,5 @@ if [[ "$OUTPUT" != *"$SEARCH"* ]]; then
   ./gradlew build
   docker build -t adegasapi .
   docker-compose up -d
+  echo "Deploy Done"
 fi
