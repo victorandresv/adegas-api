@@ -10,11 +10,8 @@ services:
     ports:
       - 8020:8020
     environment:
-      PORT: 8020
-      MONGO_HOST: mongo
-      MONGO_PORT: 27000
-      MONGO_DATABASE: adegas
-      MONGO_PASSWORD: dlbMb4LpT30diFiZ6j930Rrl76yd6OpZ
+      MONGO_URL_STRING_CONNECTION: <URI>
+      MONGO_DATABASE: <NAME>
 
 networks:
   default_network:
