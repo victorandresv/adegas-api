@@ -25,9 +25,9 @@ public class StockController {
         return new ResponseEntity<>(payload, HttpStatus.CREATED);
     }
 
-    @GetMapping("/stocks/{companyId}")
-    public ResponseEntity<List<StockCollection>> Find(@PathVariable String companyId){
-        List<StockCollection> list = repository.findByCompanyId(companyId);
+    @GetMapping("/stocks/{companyId}/{jailId}")
+    public ResponseEntity<List<StockCollection>> Find(@PathVariable String companyId, @PathVariable String jailId){
+        List<StockCollection> list = repository.findByCompanyIdAndJailId(companyId, jailId);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
