@@ -73,14 +73,18 @@ public class UserController {
     }
 
     @PutMapping("/users/{userId}/enabled/{status}")
-    public ResponseEntity<List<UserCollection>> Enabled(@PathVariable String userId, @PathVariable boolean status){
+    public ResponseEntity<ResponseModel> Enabled(@PathVariable String userId, @PathVariable boolean status){
+        ResponseModel response = new ResponseModel();
         UserCollection user = repository.findOneById(userId);
         if(user == null){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            response.setSuccess(false);
+            response.setMessage("Usuario no existe");
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
         user.setActive(status);
         repository.save(user);
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+        response.setSuccess(true);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
