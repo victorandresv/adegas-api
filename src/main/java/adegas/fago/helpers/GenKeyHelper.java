@@ -92,6 +92,8 @@ public class GenKeyHelper {
         if(jwtData == null){
             return null;
         }
+        System.out.println("JSON");
+        System.out.println(jwtData);
 
         String oid = jwtData.getString("oid");
         long exp = jwtData.getLong("exp");
