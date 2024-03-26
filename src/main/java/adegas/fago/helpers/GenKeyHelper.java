@@ -112,6 +112,8 @@ public class GenKeyHelper {
 
             return jwtData;
         } catch (Exception err){
+            System.out.println("NO VALIDA");
+            System.out.println(err.getMessage());
             return null;
         }
     }
