@@ -15,7 +15,7 @@ public class QRCodesHelper {
     public static String GenerateAztec(String data){
         AztecWriter qrCodeWriter = new AztecWriter();
         try {
-            BitMatrix bitMatrix = qrCodeWriter.encode(data, BarcodeFormat.AZTEC, 500, 500);
+            BitMatrix bitMatrix = qrCodeWriter.encode(data, BarcodeFormat.AZTEC, 800, 800);
             BufferedImage fimage = MatrixToImageWriter.toBufferedImage(bitMatrix);
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write(fimage, "png", baos);
