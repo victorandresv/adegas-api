@@ -26,13 +26,15 @@ public class HttpInterceptors implements HandlerInterceptor {
             }
         }
 
+        System.out.println(request.getRequestURI());
+
         String jwt = request.getHeader("Authorization");
         if(jwt == null){
             response.setStatus(401);
             return false;
         }
 
-        JSONObject verifyJsonWebToken = GenKeyHelper.VerifyJsonWebToken(jwt, repository);
+        JSONObject verifyJsonWebToken = GenKeyHelper.VerifyJsonWebToken(jwt, repository, false);
         if(verifyJsonWebToken == null){
             response.setStatus(401);
             return false;

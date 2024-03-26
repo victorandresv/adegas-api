@@ -4,7 +4,6 @@ import adegas.fago.helpers.GenKeyHelper;
 import adegas.fago.helpers.HeadersHelper;
 import adegas.fago.interfaces.KeysRepository;
 import adegas.fago.interfaces.UserRepository;
-import adegas.fago.models.JailCollection;
 import adegas.fago.models.KeysCollection;
 import adegas.fago.models.ResponseModel;
 import adegas.fago.models.UserCollection;

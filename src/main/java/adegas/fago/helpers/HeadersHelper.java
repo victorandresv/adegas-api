@@ -41,7 +41,7 @@ public class HeadersHelper {
         boolean isZenoAuth = HeadersHelper.isZenoAuth(headers);
 
         String jwt = HeadersHelper.GetAccessTokenHeader(headers);
-        JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository);
+        JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository, false);
         if(jsonObject == null && !isZenoAuth){
             return false;
         }

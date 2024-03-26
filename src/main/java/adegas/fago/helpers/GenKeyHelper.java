@@ -87,7 +87,7 @@ public class GenKeyHelper {
         return null;
     }
 
-    public static JSONObject VerifyJsonWebToken(String jwt, KeysRepository repository){
+    public static JSONObject VerifyJsonWebToken(String jwt, KeysRepository repository, boolean avoidExp){
         JSONObject jwtData = GenKeyHelper.DecodeDataFromJWT(jwt);
         if(jwtData == null){
             return null;
@@ -99,7 +99,7 @@ public class GenKeyHelper {
             return null;
         }
 
-        if(TimestampHelper.IsTimestampIsExpired(exp)){
+        if(TimestampHelper.IsTimestampIsExpired(exp) && !avoidExp){
             return null;
         }
 

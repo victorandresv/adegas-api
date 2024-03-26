@@ -93,7 +93,28 @@ public class SigninController {
     public ResponseEntity<ResponseModel> AuthAccessToken(@RequestHeader Map<String, String> headers){
 
         String jwt = HeadersHelper.GetAccessTokenHeader(headers);
-        JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository);
+        JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository, false);
+        if(jsonObject == null){
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+
+        UserCollection user = repository.findOneById(jsonObject.getString("oid"));
+        KeysCollection key = keyRepository.findOneByUserId(jsonObject.getString("oid"));
+        String jwtString = GenKeyHelper.GetJsonWebToken(key.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*2);
+
+        ResponseModel response = new ResponseModel();
+        response.setSuccess(true);
+        response.setData(jwtString);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/auth/refresh-token")
+    public ResponseEntity<ResponseModel> AuthRefreshToken(@RequestHeader Map<String, String> headers){
+
+        String jwt = HeadersHelper.GetAccessTokenHeader(headers);
+        JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository, true);
         if(jsonObject == null){
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
