@@ -71,4 +71,16 @@ public class UserController {
         List<UserCollection> list = repository.findByCompanyId(companyId);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+    @PutMapping("/users/{userId}/enabled/{status}")
+    public ResponseEntity<List<UserCollection>> Enabled(@PathVariable String userId, @PathVariable boolean status){
+        UserCollection user = repository.findOneById(userId);
+        if(user == null){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        user.setActive(status);
+        repository.save(user);
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
+    }
 }
