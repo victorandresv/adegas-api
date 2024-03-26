@@ -4,19 +4,18 @@ import adegas.fago.helpers.GenKeyHelper;
 import adegas.fago.helpers.HeadersHelper;
 import adegas.fago.interfaces.KeysRepository;
 import adegas.fago.interfaces.UserRepository;
+import adegas.fago.models.JailCollection;
 import adegas.fago.models.KeysCollection;
 import adegas.fago.models.ResponseModel;
 import adegas.fago.models.UserCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -65,5 +64,11 @@ public class UserController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/users/{companyId}")
+    public ResponseEntity<List<UserCollection>> Find(@PathVariable String companyId){
+        List<UserCollection> list = repository.findByCompanyId(companyId);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

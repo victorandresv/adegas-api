@@ -13,6 +13,15 @@ public class UserCollection {
     private String name;
     private String phone;
     private String rol;
+    private String jailId;
+
+    public void setJailId(String jailId) {
+        this.jailId = jailId;
+    }
+
+    public String getJailId() {
+        return jailId;
+    }
 
     public void setName(String name) {
         this.name = name;
