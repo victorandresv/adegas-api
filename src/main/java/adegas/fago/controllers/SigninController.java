@@ -75,7 +75,7 @@ public class SigninController {
             }
             KeysCollection keysCollection = keyRepository.findOneByUserId(user.getID());
 
-            String jwtString = GenKeyHelper.GetJsonWebToken(keysCollection.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*2);
+            String jwtString = GenKeyHelper.GetJsonWebToken(keysCollection.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*4);
 
             ResponseModel response = new ResponseModel();
             response.setSuccess(true);
@@ -100,7 +100,7 @@ public class SigninController {
 
         UserCollection user = repository.findOneById(jsonObject.getString("oid"));
         KeysCollection key = keyRepository.findOneByUserId(jsonObject.getString("oid"));
-        String jwtString = GenKeyHelper.GetJsonWebToken(key.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*2);
+        String jwtString = GenKeyHelper.GetJsonWebToken(key.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*4);
 
         ResponseModel response = new ResponseModel();
         response.setSuccess(true);
@@ -121,7 +121,7 @@ public class SigninController {
 
         UserCollection user = repository.findOneById(jsonObject.getString("oid"));
         KeysCollection key = keyRepository.findOneByUserId(jsonObject.getString("oid"));
-        String jwtString = GenKeyHelper.GetJsonWebToken(key.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*2);
+        String jwtString = GenKeyHelper.GetJsonWebToken(key.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*4);
 
         ResponseModel response = new ResponseModel();
         response.setSuccess(true);
