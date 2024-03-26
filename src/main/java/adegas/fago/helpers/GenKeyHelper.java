@@ -92,8 +92,6 @@ public class GenKeyHelper {
         if(jwtData == null){
             return null;
         }
-        System.out.println("JSON");
-        System.out.println(jwtData);
 
         String oid = jwtData.getString("oid");
         long exp = jwtData.getLong("exp");
@@ -101,7 +99,11 @@ public class GenKeyHelper {
             return null;
         }
 
-        if(TimestampHelper.IsTimestampIsExpired(exp) && !avoidExp){
+        if(avoidExp){
+            return jwtData;
+        }
+
+        if(TimestampHelper.IsTimestampIsExpired(exp)){
             return null;
         }
 
@@ -114,8 +116,6 @@ public class GenKeyHelper {
 
             return jwtData;
         } catch (Exception err){
-            System.out.println("NO VALIDA");
-            System.out.println(err.getMessage());
             return null;
         }
     }

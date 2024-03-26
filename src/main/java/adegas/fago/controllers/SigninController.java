@@ -120,14 +120,19 @@ public class SigninController {
         }
 
         UserCollection user = repository.findOneById(jsonObject.getString("oid"));
-        KeysCollection key = keyRepository.findOneByUserId(jsonObject.getString("oid"));
-        String jwtString = GenKeyHelper.GetJsonWebToken(key.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*4);
 
-        ResponseModel response = new ResponseModel();
-        response.setSuccess(true);
-        response.setData(jwtString);
+        if(user.isActive()){
+            KeysCollection key = keyRepository.findOneByUserId(jsonObject.getString("oid"));
+            String jwtString = GenKeyHelper.GetJsonWebToken(key.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*4);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+            ResponseModel response = new ResponseModel();
+            response.setSuccess(true);
+            response.setData(jwtString);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 
     }
 

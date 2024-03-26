@@ -37,6 +37,7 @@ public class UserController {
         UserCollection user = repository.findByCompanyIdAndPhone(payload.getCompanyId(), payload.getPhone());
         if(user == null){
 
+            payload.setActive(true);
             repository.save(payload);
             user = repository.findByCompanyIdAndPhone(payload.getCompanyId(), payload.getPhone());
 
@@ -58,7 +59,7 @@ public class UserController {
 
         } else {
             response.setSuccess(false);
-            response.setMessage("El teléfono ingresado ya existe");
+            response.setMessage("El número de celular ingresado ya existe");
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);

@@ -36,8 +36,6 @@ public class HttpInterceptors implements HandlerInterceptor {
         if(request.getRequestURI().equals("/auth/refresh-token")){
             avoidExp = true;
         }
-        System.out.println("INTERCEPTOR");
-        System.out.println(avoidExp);
 
         JSONObject verifyJsonWebToken = GenKeyHelper.VerifyJsonWebToken(jwt, repository, avoidExp);
         if(verifyJsonWebToken == null){

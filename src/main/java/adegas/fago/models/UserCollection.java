@@ -14,6 +14,15 @@ public class UserCollection {
     private String phone;
     private String rol;
     private String jailId;
+    private boolean isActive;
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
     public void setJailId(String jailId) {
         this.jailId = jailId;
