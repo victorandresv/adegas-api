@@ -88,6 +88,22 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PutMapping("/users/{userId}/name/{name}")
+    public ResponseEntity<ResponseModel> Setname(@PathVariable String userId, @PathVariable String name){
+        ResponseModel response = new ResponseModel();
+        UserCollection user = repository.findOneById(userId);
+        if(user == null){
+            response.setSuccess(false);
+            response.setMessage("El usuario no existe");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        user.setName(name);
+        repository.save(user);
+        response.setSuccess(true);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/user/{phone}")
     public ResponseEntity<UserCollection> FindOneByPhone(@PathVariable String phone){
         UserCollection list = repository.findOneByPhone(phone);
