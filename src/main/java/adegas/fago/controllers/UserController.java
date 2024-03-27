@@ -89,7 +89,7 @@ public class UserController {
     }
 
     @GetMapping("/user/{phone}")
-    public ResponseEntity<UserCollection> FindOne(@PathVariable String phone){
+    public ResponseEntity<UserCollection> FindOneByPhone(@PathVariable String phone){
         UserCollection list = repository.findOneByPhone(phone);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
