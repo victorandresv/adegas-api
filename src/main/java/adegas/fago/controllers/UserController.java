@@ -87,4 +87,10 @@ public class UserController {
         response.setSuccess(true);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<UserCollection> FindOne(@PathVariable String userId){
+        UserCollection list = repository.findOneById(userId);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }
