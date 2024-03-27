@@ -17,6 +17,25 @@ public class OrderCollection {
     private String name;
     private String phone;
     private String status;
+    private String jailId;
+    private String companyId;
+
+    public String getJailId() {
+        return jailId;
+    }
+
+    public void setJailId(String jailId) {
+        this.jailId = jailId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
     private ArrayList<OrderCollectionItems> items;
 
     public String getID() {
@@ -102,6 +121,8 @@ public class OrderCollection {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", status='" + status + '\'' +
+                ", jailId='" + jailId + '\'' +
+                ", companyId='" + companyId + '\'' +
                 ", items=" + items +
                 '}';
     }
