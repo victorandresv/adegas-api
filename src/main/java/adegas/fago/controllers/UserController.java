@@ -89,8 +89,8 @@ public class UserController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<UserCollection> FindOne(@PathVariable String userId){
-        UserCollection list = repository.findOneById(userId);
+    public ResponseEntity<UserCollection> FindOne(@PathVariable String phone){
+        UserCollection list = repository.findOneByPhone(phone);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

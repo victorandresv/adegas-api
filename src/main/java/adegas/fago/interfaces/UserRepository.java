@@ -15,4 +15,7 @@ public interface UserRepository extends MongoRepository<UserCollection, String> 
 
     @Query(value = "{'companyId': ?0}")
     List<UserCollection> findByCompanyId(String cid);
+
+    @Query(value = "{'phone': ?0}")
+    UserCollection findOneByPhone(String phone);
 }
