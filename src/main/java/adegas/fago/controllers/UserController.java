@@ -93,4 +93,10 @@ public class UserController {
         UserCollection list = repository.findOneByPhone(phone);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+    @GetMapping("/user/{oid}")
+    public ResponseEntity<UserCollection> FindOneById(@PathVariable String oid){
+        UserCollection list = repository.findOneById(oid);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }
