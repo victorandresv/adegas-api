@@ -7,9 +7,7 @@ import org.springframework.data.mongodb.repository.Query;
 import java.util.List;
 
 public interface OrdersRepository extends MongoRepository<OrderCollection, String> {
-    @Query(value = "{'companyId': ?0}")
-    List<OrderCollection> findByCompanyId(String cid);
+    @Query(value = "{'companyId': ?0, 'jailId': ?1}")
+    List<OrderCollection> findByCompanyIdJailId(String cid, String jailId);
 
-    @Query(value = "{'phone': ?0}")
-    OrderCollection findOneByPhone(String phone);
 }
