@@ -32,7 +32,7 @@ public class OrdersController {
     }
 
     @GetMapping("/orders")
-    public ResponseEntity<List<OrderCollection>> Get(@PathVariable String companyId, @RequestHeader Map<String, String> headers){
+    public ResponseEntity<List<OrderCollection>> Get(@RequestHeader Map<String, String> headers){
         String jwt = HeadersHelper.GetAccessTokenHeader(headers);
         System.out.println(jwt);
         JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository, false);
