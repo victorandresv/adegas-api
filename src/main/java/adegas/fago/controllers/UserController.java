@@ -78,7 +78,7 @@ public class UserController {
         UserCollection user = repository.findOneById(userId);
         if(user == null){
             response.setSuccess(false);
-            response.setMessage("Usuario no existe");
+            response.setMessage("El usuario no existe");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
