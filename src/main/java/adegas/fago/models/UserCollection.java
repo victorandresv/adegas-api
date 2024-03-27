@@ -87,4 +87,19 @@ public class UserCollection {
     public void setCompanyId(String companyId) {
         this.companyId = companyId;
     }
+
+    @Override
+    public String toString() {
+        return "UserCollection{" +
+                "ID='" + ID + '\'' +
+                ", companyId='" + companyId + '\'' +
+                ", isWorking=" + isWorking +
+                ", lastLatLng=" + lastLatLng +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", rol='" + rol + '\'' +
+                ", jailId='" + jailId + '\'' +
+                ", isActive=" + isActive +
+                '}';
+    }
 }

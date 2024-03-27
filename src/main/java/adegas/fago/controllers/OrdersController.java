@@ -34,14 +34,17 @@ public class OrdersController {
     @GetMapping("/orders")
     public ResponseEntity<List<OrderCollection>> Get(@PathVariable String companyId, @RequestHeader Map<String, String> headers){
         String jwt = HeadersHelper.GetAccessTokenHeader(headers);
+        System.out.println(jwt);
         JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository, false);
         if(jsonObject == null){
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
+        System.out.println(jsonObject.toString());
         UserCollection user = userRepository.findOneById(jsonObject.getString("oid"));
         if(user == null){
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
+        System.out.println(user.toString());
         List<OrderCollection> list = repository.findByCompanyIdJailId(user.getCompanyId(), user.getJailId());
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
