@@ -80,8 +80,8 @@ public class OrdersController {
 
         OrdersLocationCollection ordersLocationCollection = new OrdersLocationCollection();
         ordersLocationCollection.setOrderId(order.getID());
-        ordersLocationCollection.setLatLng((List<Double>)payload.get("id"));
-        ordersLocationCollection.setBearing((float)payload.get("id"));
+        ordersLocationCollection.setLatLng((List<Double>)payload.get("coords"));
+        ordersLocationCollection.setBearing((float)payload.get("bearing"));
         ordersLocationCollection.setTimeStamp((long)payload.get("timestamp"));
         ordersLocationRepository.save(ordersLocationCollection);
         response.setSuccess(true);
