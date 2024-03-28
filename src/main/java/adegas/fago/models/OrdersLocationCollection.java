@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document(collection = "orders")
+@Document(collection = "location_orders")
 public class OrdersLocationCollection {
     @Id
     private String ID;
