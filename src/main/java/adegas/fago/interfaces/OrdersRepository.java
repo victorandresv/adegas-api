@@ -10,4 +10,7 @@ public interface OrdersRepository extends MongoRepository<OrderCollection, Strin
     @Query(value = "{'companyId': ?0, 'jailId': ?1}")
     List<OrderCollection> findByCompanyIdJailId(String cid, String jailId);
 
+    @Query(value = "{'_id': ?0}")
+    OrderCollection findOneById(String id);
+
 }
