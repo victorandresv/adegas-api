@@ -87,4 +87,10 @@ public class OrdersController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping("/orders/location/{orderId}")
+    public ResponseEntity<List<OrdersLocationCollection>> GetLocation(@PathVariable String orderId){
+        List<OrdersLocationCollection> list = ordersLocationRepository.findLocationsByOrderId(orderId);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
 }
