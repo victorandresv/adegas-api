@@ -10,7 +10,7 @@ public interface OrdersLocationRepository extends MongoRepository<OrdersLocation
     @Aggregation(pipeline = {
             "{ '$match': { 'orderId' : ?0 } }",
             "{ '$sort' : { 'timeStamp' : 1 } }",
-            "{ '$limit' : 100 }"
+            "{ '$limit' : 1000 }"
     })
     List<OrdersLocationCollection> findLocationsByOrderId(String orderId);
 }
