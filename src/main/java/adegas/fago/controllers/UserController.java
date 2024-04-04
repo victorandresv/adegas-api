@@ -3,10 +3,12 @@ package adegas.fago.controllers;
 import adegas.fago.helpers.GenKeyHelper;
 import adegas.fago.helpers.HeadersHelper;
 import adegas.fago.interfaces.KeysRepository;
+import adegas.fago.interfaces.UserLocationRepository;
 import adegas.fago.interfaces.UserRepository;
 import adegas.fago.models.KeysCollection;
 import adegas.fago.models.ResponseModel;
 import adegas.fago.models.UserCollection;
+import adegas.fago.models.UserLocationCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ public class UserController {
     private UserRepository repository;
     @Autowired
     private KeysRepository keyRepository;
+    @Autowired
+    private UserLocationRepository userLocationRepository;
 
     @PostMapping(value="/users")
     public ResponseEntity<ResponseModel> Create(@RequestBody UserCollection payload, @RequestHeader Map<String, String> headers){
@@ -113,6 +117,12 @@ public class UserController {
     @GetMapping("/user/id/{oid}")
     public ResponseEntity<UserCollection> FindOneById(@PathVariable String oid){
         UserCollection list = repository.findOneById(oid);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{userId}/locations")
+    public ResponseEntity<List<UserLocationCollection>> FindUserLocations(@PathVariable String userId){
+        List<UserLocationCollection> list = userLocationRepository.findUserLocations(userId, 500);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
