@@ -15,6 +15,15 @@ public class UserCollection {
     private String rol;
     private String jailId;
     private boolean isActive;
+    private boolean isLoggedInByPhone;
+
+    public boolean isLoggedInByPhone() {
+        return isLoggedInByPhone;
+    }
+
+    public void setLoggedInByPhone(boolean loggedInByPhone) {
+        isLoggedInByPhone = loggedInByPhone;
+    }
 
     public boolean isActive() {
         return isActive;

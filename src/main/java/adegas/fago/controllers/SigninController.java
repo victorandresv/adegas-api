@@ -148,9 +148,15 @@ public class SigninController {
             if(!user.isActive()){
                 response.setSuccess(false);
                 response.setMessage("El número de celular ingresado se encuentra desactivado para iniciar sesión");
+            } else if(user.isLoggedInByPhone()){
+                response.setSuccess(false);
+                response.setMessage("No es posible iniciar sesión con el número de celular ingresado");
             } else {
                 KeysCollection key = keyRepository.findOneByUserId(user.getID());
                 String jwtString = GenKeyHelper.GetJsonWebToken(key.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*4);
+
+                user.setLoggedInByPhone(true);
+                repository.save(user);
 
                 response.setSuccess(true);
                 response.setData(jwtString);
