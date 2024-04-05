@@ -18,6 +18,10 @@ public class HttpInterceptors implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
+        if(request.getRequestURI().contains("/auth/phone/")){
+            return HandlerInterceptor.super.preHandle(request, response, handler);
+        }
+
         String ZenoAuthToken = request.getHeader("ZenoAuthToken");
         if(ZenoAuthToken != null){
             String ZENO_AUTH_TOKEN = System.getenv("ZENO_AUTH_TOKEN");

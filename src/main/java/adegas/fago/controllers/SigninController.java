@@ -136,5 +136,30 @@ public class SigninController {
 
     }
 
+    @GetMapping("/auth/phone/{phone}")
+    public ResponseEntity<ResponseModel> AuthByPhone(@PathVariable String phone){
+
+        ResponseModel response = new ResponseModel();
+        UserCollection user = repository.findOneByPhone(phone);
+        if(user == null){
+            response.setSuccess(false);
+            response.setMessage("El número de celular ingresado no se encuentra autorizado para iniciar sesión");
+        } else {
+            if(!user.isActive()){
+                response.setSuccess(false);
+                response.setMessage("El número de celular ingresado se encuentra desactivado para iniciar sesión");
+            } else {
+                KeysCollection key = keyRepository.findOneByUserId(user.getID());
+                String jwtString = GenKeyHelper.GetJsonWebToken(key.getPrivateKey(), user.getID(), user.getCompanyId(), user.getRol(), 60*4);
+
+                response.setSuccess(true);
+                response.setData(jwtString);
+            }
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
 
 }
