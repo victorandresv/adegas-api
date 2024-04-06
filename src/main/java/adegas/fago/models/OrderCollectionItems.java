@@ -4,10 +4,14 @@ public class OrderCollectionItems {
     private String paymentType;
     private String product;
     private int quantity;
-    private float unitPrice;
+    private float totalPrice;
 
-    public float getUnitPrice() {
-        return unitPrice;
+    public float getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(float totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public int getQuantity() {
@@ -34,17 +38,13 @@ public class OrderCollectionItems {
         this.quantity = quantity;
     }
 
-    public void setUnitPrice(float unitPrice) {
-        this.unitPrice = unitPrice;
-    }
-
     @Override
     public String toString() {
         return "OrderCollectionItems{" +
                 "paymentType='" + paymentType + '\'' +
                 ", product='" + product + '\'' +
                 ", quantity=" + quantity +
-                ", unitPrice=" + unitPrice +
+                ", totalPrice=" + totalPrice +
                 '}';
     }
 }
