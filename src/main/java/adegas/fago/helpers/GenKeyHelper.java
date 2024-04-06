@@ -37,11 +37,12 @@ public class GenKeyHelper {
         return encoder.encodeToString(key.getEncoded());
     }
 
-    public static String GetJsonWebToken(String privateKey, String oid, String cid, String rol, int minutes){
+    public static String GetJsonWebToken(String privateKey, String oid, String cid, String rol, String jid, int minutes){
         String jwt = Jwts.builder()
                 .claim("oid", oid)
                 .claim("cid", cid)
                 .claim("rol", rol)
+                .claim("jid", jid)
                 .issuedAt(new Date())
                 .expiration(new Date((new Date()).getTime() + 1000 * 60 * minutes))
                 .signWith(GenKeyHelper.GetPrivateKey(privateKey))

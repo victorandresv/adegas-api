@@ -30,8 +30,24 @@ public class OrdersController {
     @Autowired
     private OrdersLocationRepository ordersLocationRepository;
 
+    private JSONObject IsAllowToOperate(Map<String, String> headers){
+        String jwt = HeadersHelper.GetAccessTokenHeader(headers);
+        JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository, false);
+        if(jsonObject == null){
+            return null;
+        }
+        return jsonObject;
+    }
+
     @PostMapping(value="/orders")
-    public ResponseEntity<OrderCollection> Create(@RequestBody OrderCollection payload){
+    public ResponseEntity<Object> Create(@RequestBody OrderCollection payload, @RequestHeader Map<String, String> headers){
+        JSONObject jsonObject = IsAllowToOperate(headers);
+        if(jsonObject == null){
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+
+        payload.setCompanyId(jsonObject.getString("cid"));
+        payload.setJailId(jsonObject.getString("jid"));
         repository.save(payload);
         return new ResponseEntity<>(payload, HttpStatus.CREATED);
     }
