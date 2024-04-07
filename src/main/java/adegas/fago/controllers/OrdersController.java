@@ -12,6 +12,7 @@ import adegas.fago.models.ResponseModel;
 import adegas.fago.models.UserCollection;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,17 +55,12 @@ public class OrdersController {
     }
 
     @GetMapping("/orders")
-    public ResponseEntity<List<OrderCollection>> Get(@RequestHeader Map<String, String> headers){
-        String jwt = HeadersHelper.GetAccessTokenHeader(headers);
-        JSONObject jsonObject = GenKeyHelper.VerifyJsonWebToken(jwt, keyRepository, false);
+    public ResponseEntity<List<OrderCollection>> Get(@RequestHeader Map<String, String> headers, @RequestParam long dateTimeStart, @RequestParam long dateTimeEnd){
+        JSONObject jsonObject = IsAllowToOperate(headers);
         if(jsonObject == null){
-            return new ResponseEntity<>(null, HttpStatus.OK);
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
-        UserCollection user = userRepository.findOneById(jsonObject.getString("oid"));
-        if(user == null){
-            return new ResponseEntity<>(null, HttpStatus.OK);
-        }
-        List<OrderCollection> list = repository.findByCompanyIdJailId(user.getCompanyId(), user.getJailId());
+        List<OrderCollection> list = repository.findByCompanyIdJailId(jsonObject.getString("cid"), jsonObject.getString("jid"), dateTimeStart, dateTimeEnd);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
