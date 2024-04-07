@@ -9,10 +9,8 @@ import adegas.fago.interfaces.UserRepository;
 import adegas.fago.models.OrderCollection;
 import adegas.fago.models.OrdersLocationCollection;
 import adegas.fago.models.ResponseModel;
-import adegas.fago.models.UserCollection;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +58,15 @@ public class OrdersController {
         if(jsonObject == null){
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
-        List<OrderCollection> list = repository.findByCompanyIdJailId(jsonObject.getString("cid"), jsonObject.getString("jid"), dateTimeStart, dateTimeEnd);
+        String jid = "";
+        try{
+            jid = jsonObject.getString("jid");
+        } catch (Exception ignored){}
+        if(jid.isEmpty()) {
+            List<OrderCollection> list = repository.findByCompanyIdJailId(jsonObject.getString("cid"), dateTimeStart, dateTimeEnd);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        }
+        List<OrderCollection> list = repository.findByCompanyIdJailId(jsonObject.getString("cid"), jid, dateTimeStart, dateTimeEnd);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
