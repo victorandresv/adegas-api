@@ -63,10 +63,14 @@ public class OrdersController {
             jid = jsonObject.getString("jid");
         } catch (Exception ignored){}
         if(jid.isEmpty()) {
-            List<OrderCollection> list = repository.findByCompanyIdJailId(jsonObject.getString("cid"), dateTimeStart, dateTimeEnd);
+            List<OrderCollection> list = repository.findBy(jsonObject.getString("cid"), dateTimeStart, dateTimeEnd);
             return new ResponseEntity<>(list, HttpStatus.OK);
         }
-        List<OrderCollection> list = repository.findByCompanyIdJailId(jsonObject.getString("cid"), jid, dateTimeStart, dateTimeEnd);
+        if(jsonObject.get("rol").equals("driver")){
+            List<OrderCollection> list = repository.findBy(jsonObject.getString("oid"), jsonObject.getString("cid"), jid, dateTimeStart, dateTimeEnd);
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        }
+        List<OrderCollection> list = repository.findBy(jsonObject.getString("cid"), jid, dateTimeStart, dateTimeEnd);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
