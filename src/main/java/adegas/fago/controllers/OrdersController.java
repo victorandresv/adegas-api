@@ -93,6 +93,22 @@ public class OrdersController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PutMapping("/orders/{orderId}/assign-to/{userId}")
+    public ResponseEntity<ResponseModel> AssignTo(@PathVariable String orderId, @PathVariable String userId){
+        ResponseModel response = new ResponseModel();
+        OrderCollection order = repository.findOneById(orderId);
+        if(order == null){
+            response.setSuccess(false);
+            response.setMessage("El pedido no existe");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        order.setAssignedTo(userId);
+        repository.save(order);
+        response.setSuccess(true);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping("/orders/location")
     public ResponseEntity<ResponseModel> SetOrderLocation(@RequestBody Map<String, Object> payload){
         ResponseModel response = new ResponseModel();
