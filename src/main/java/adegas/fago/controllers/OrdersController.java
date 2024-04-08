@@ -6,15 +6,14 @@ import adegas.fago.interfaces.KeysRepository;
 import adegas.fago.interfaces.OrdersLocationRepository;
 import adegas.fago.interfaces.OrdersRepository;
 import adegas.fago.interfaces.UserRepository;
-import adegas.fago.models.OrderCollection;
-import adegas.fago.models.OrdersLocationCollection;
-import adegas.fago.models.ResponseModel;
+import adegas.fago.models.*;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -133,6 +132,62 @@ public class OrdersController {
     public ResponseEntity<List<OrdersLocationCollection>> GetLocation(@PathVariable String orderId){
         List<OrdersLocationCollection> list = ordersLocationRepository.findLocationsByOrderId(orderId);
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/orders/day-resume/{userId}")
+    public ResponseEntity<List<DayResume>> GetDayResume(@RequestHeader Map<String, String> headers, @PathVariable String userId, @RequestParam long dateTimeStart, @RequestParam long dateTimeEnd){
+        JSONObject jsonObject = IsAllowToOperate(headers);
+        if(jsonObject == null){
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+        String cid = jsonObject.getString("cid");
+        List<OrderCollection> list = repository.findBy(cid, userId, dateTimeStart, dateTimeEnd,true);
+        List<DayResume> listResume = new ArrayList<>();
+        for(OrderCollection order: list){
+            DayResume dayResume = new DayResume();
+            dayResume.setPhone(order.getPhone());
+            dayResume.setAddress(order.getAddress());
+
+            Integer[] quantities = new Integer[]{0,0,0,0,0};
+            ArrayList<String> paymentsType = new ArrayList<>();
+            float total = 0;
+            for(OrderCollectionItems item: order.getItems()){
+                boolean add = true;
+                for(String pt: paymentsType){
+                    if(pt.equals(item.getPaymentType())){
+                        add = false;
+                        break;
+                    }
+                }
+                if(add){
+                    paymentsType.add(item.getPaymentType());
+                }
+                total += item.getTotalPrice();
+                switch (item.getProduct()) {
+                    case "5K":
+                        quantities[0] = item.getQuantity();
+                        break;
+                    case "11K":
+                        quantities[1] = item.getQuantity();
+                        break;
+                    case "15K":
+                        quantities[2] = item.getQuantity();
+                        break;
+                    case "45K":
+                        quantities[3] = item.getQuantity();
+                        break;
+                    case "Aluminio":
+                        quantities[4] = item.getQuantity();
+                        break;
+                }
+            }
+            dayResume.setTypePayment(String.join(",", paymentsType));
+            dayResume.setValue(total);
+            dayResume.setQuantities(quantities);
+
+            listResume.add(dayResume);
+        }
+        return new ResponseEntity<>(listResume, HttpStatus.OK);
     }
 
 }

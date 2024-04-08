@@ -22,6 +22,12 @@ public interface OrdersRepository extends MongoRepository<OrderCollection, Strin
     List<OrderCollection> findBy(String cid, String jailId, long dtStart, long dtEnd);
 
     @Aggregation(pipeline = {
+            "{ '$match': { 'companyId' : ?0, 'assignedTo': ?1, 'createdAt': {'$gte': ?2, '$lte': ?3} } }",
+            "{ '$sort' : { 'createdAt' : -1 } }"
+    })
+    List<OrderCollection> findBy(String cid, String userId, long dtStart, long dtEnd, boolean empty);
+
+    @Aggregation(pipeline = {
             "{ '$match': { 'companyId' : ?0, 'createdAt': {'$gte': ?1, '$lte': ?2} } }",
             "{ '$sort' : { 'createdAt' : -1 } }"
     })
