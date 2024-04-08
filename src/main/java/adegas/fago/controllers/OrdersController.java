@@ -66,10 +66,13 @@ public class OrdersController {
             List<OrderCollection> list = repository.findBy(jsonObject.getString("cid"), dateTimeStart, dateTimeEnd);
             return new ResponseEntity<>(list, HttpStatus.OK);
         }
+        /*
+        TODO: esta seccion es para futuro cuando se hagan las autoasignaciones de pedidos
         if(jsonObject.get("rol").equals("driver")){
             List<OrderCollection> list = repository.findBy(jsonObject.getString("oid"), jsonObject.getString("cid"), jid, dateTimeStart, dateTimeEnd);
             return new ResponseEntity<>(list, HttpStatus.OK);
         }
+        */
         List<OrderCollection> list = repository.findBy(jsonObject.getString("cid"), jid, dateTimeStart, dateTimeEnd);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
