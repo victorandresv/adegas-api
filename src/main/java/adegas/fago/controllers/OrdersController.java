@@ -80,15 +80,15 @@ public class OrdersController {
     @PutMapping("/orders/{orderId}/status/{status}")
     public ResponseEntity<ResponseModel> SetStatus(@PathVariable String orderId, @PathVariable String status){
         ResponseModel response = new ResponseModel();
-        OrderCollection user = repository.findOneById(orderId);
-        if(user == null){
+        OrderCollection order = repository.findOneById(orderId);
+        if(order == null){
             response.setSuccess(false);
             response.setMessage("El pedido no existe");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
-        user.setStatus(status);
-        repository.save(user);
+        order.setStatus(status);
+        repository.save(order);
         response.setSuccess(true);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
