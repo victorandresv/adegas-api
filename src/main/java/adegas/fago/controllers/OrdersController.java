@@ -46,7 +46,6 @@ public class OrdersController {
 
         payload.setCompanyId(jsonObject.getString("cid"));
         payload.setJailId(jsonObject.getString("jid"));
-        payload.setStatus("new");
         repository.save(payload);
         return new ResponseEntity<>(payload, HttpStatus.CREATED);
     }
