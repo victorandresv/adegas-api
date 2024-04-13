@@ -1,7 +1,5 @@
 package adegas.fago.models;
 
-import java.util.ArrayList;
-
 public class DayResume {
     private String phone;
     private String address;

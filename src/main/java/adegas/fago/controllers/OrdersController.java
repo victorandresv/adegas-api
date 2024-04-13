@@ -140,7 +140,13 @@ public class OrdersController {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
         }
         String cid = jsonObject.getString("cid");
-        List<OrderCollection> list = repository.findBy(cid, userId, dateTimeStart, dateTimeEnd,true);
+        List<OrderCollection> list = null;
+        if(jsonObject.getString("rol").equals("central")){
+            String jailId = jsonObject.getString("jid");
+            list = repository.findBy(cid, jailId, dateTimeStart, dateTimeEnd);
+        } else {
+            list = repository.findBy(cid, userId, dateTimeStart, dateTimeEnd,true);
+        }
         List<DayResume> listResume = new ArrayList<>();
         for(OrderCollection order: list){
             DayResume dayResume = new DayResume();
