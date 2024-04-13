@@ -5,6 +5,15 @@ public class OrderCollectionItems {
     private String product;
     private int quantity;
     private float totalPrice;
+    private String discountCode;
+
+    public String getDiscountCode() {
+        return discountCode;
+    }
+
+    public void setDiscountCode(String discountCode) {
+        this.discountCode = discountCode;
+    }
 
     public float getTotalPrice() {
         return totalPrice;
