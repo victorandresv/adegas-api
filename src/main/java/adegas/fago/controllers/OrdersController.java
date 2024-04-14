@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -134,7 +135,7 @@ public class OrdersController {
     }
 
     @GetMapping("/orders/day-resume/{userId}")
-    public ResponseEntity<List<DayResume>> GetDayResume(@RequestHeader Map<String, String> headers, @PathVariable String userId, @RequestParam long dateTimeStart, @RequestParam long dateTimeEnd){
+    public ResponseEntity<Map<String, Object>> GetDayResume(@RequestHeader Map<String, String> headers, @PathVariable String userId, @RequestParam long dateTimeStart, @RequestParam long dateTimeEnd){
         JSONObject jsonObject = IsAllowToOperate(headers);
         if(jsonObject == null){
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
@@ -148,11 +149,28 @@ public class OrdersController {
             list = repository.findBy(cid, userId, dateTimeStart, dateTimeEnd,true);
         }
         List<DayResume> listResume = new ArrayList<>();
+        float globalTotal = 0;
         for(OrderCollection order: list){
+            float totalItems = 0;
             DayResume dayResume = new DayResume();
             dayResume.setPhone(order.getPhone());
             dayResume.setAddress(order.getAddress());
+            List<DayResumeItems> dayResumeItems = new ArrayList<>();
+            for(OrderCollectionItems orderItems: order.getItems()){
+                DayResumeItems dayResumeItem = new DayResumeItems();
+                dayResumeItem.setQuantity(orderItems.getQuantity());
+                dayResumeItem.setDiscountCode(orderItems.getDiscountCode());
+                dayResumeItem.setPaymentType(orderItems.getPaymentType());
+                dayResumeItem.setValue(orderItems.getTotalPrice());
+                dayResumeItem.setProduct(orderItems.getProduct());
+                dayResumeItems.add(dayResumeItem);
+                totalItems += orderItems.getTotalPrice();
+            }
+            globalTotal += totalItems;
+            dayResume.setTotal(totalItems);
+            dayResume.setItems(dayResumeItems);
 
+            /*
             Integer[] quantities = new Integer[]{0,0,0,0,0};
             ArrayList<String> paymentsType = new ArrayList<>();
             float total = 0;
@@ -185,14 +203,19 @@ public class OrdersController {
                         quantities[4] = item.getQuantity();
                         break;
                 }
+                dayResume.setDiscountCode(item.getDiscountCode());
             }
             dayResume.setTypePayment(String.join(",", paymentsType));
             dayResume.setValue(total);
             dayResume.setQuantities(quantities);
+            */
 
             listResume.add(dayResume);
         }
-        return new ResponseEntity<>(listResume, HttpStatus.OK);
+        Map<String, Object> result = new HashMap<>();
+        result.put("items", listResume);
+        result.put("total", globalTotal);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 }
