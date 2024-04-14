@@ -151,66 +151,21 @@ public class OrdersController {
         List<DayResume> listResume = new ArrayList<>();
         float globalTotal = 0;
         for(OrderCollection order: list){
-            float totalItems = 0;
-            DayResume dayResume = new DayResume();
-            dayResume.setPhone(order.getPhone());
-            dayResume.setAddress(order.getAddress());
-            List<DayResumeItems> dayResumeItems = new ArrayList<>();
             for(OrderCollectionItems orderItems: order.getItems()){
-                DayResumeItems dayResumeItem = new DayResumeItems();
-                dayResumeItem.setQuantity(orderItems.getQuantity());
-                dayResumeItem.setDiscountCode(orderItems.getDiscountCode());
-                dayResumeItem.setPaymentType(orderItems.getPaymentType());
-                dayResumeItem.setValue(orderItems.getTotalPrice());
-                dayResumeItem.setProduct(orderItems.getProduct());
-                dayResumeItems.add(dayResumeItem);
-                totalItems += orderItems.getTotalPrice();
+                DayResume dayResume = new DayResume();
+                dayResume.setPhone(order.getPhone());
+                dayResume.setProduct(orderItems.getProduct());
+                if(orderItems.getDiscountCode() == null){
+                    dayResume.setDiscountCode("");
+                } else {
+                    dayResume.setDiscountCode(orderItems.getDiscountCode());
+                }
+                dayResume.setQuantity(orderItems.getQuantity());
+                dayResume.setTotal(orderItems.getTotalPrice());
+                dayResume.setPaymentType(orderItems.getPaymentType());
+                listResume.add(dayResume);
+                globalTotal += orderItems.getTotalPrice();
             }
-            globalTotal += totalItems;
-            dayResume.setTotal(totalItems);
-            dayResume.setItems(dayResumeItems);
-
-            /*
-            Integer[] quantities = new Integer[]{0,0,0,0,0};
-            ArrayList<String> paymentsType = new ArrayList<>();
-            float total = 0;
-            for(OrderCollectionItems item: order.getItems()){
-                boolean add = true;
-                for(String pt: paymentsType){
-                    if(pt.equals(item.getPaymentType())){
-                        add = false;
-                        break;
-                    }
-                }
-                if(add){
-                    paymentsType.add(item.getPaymentType());
-                }
-                total += item.getTotalPrice();
-                switch (item.getProduct()) {
-                    case "5K":
-                        quantities[0] = item.getQuantity();
-                        break;
-                    case "11K":
-                        quantities[1] = item.getQuantity();
-                        break;
-                    case "15K":
-                        quantities[2] = item.getQuantity();
-                        break;
-                    case "45K":
-                        quantities[3] = item.getQuantity();
-                        break;
-                    case "Aluminio":
-                        quantities[4] = item.getQuantity();
-                        break;
-                }
-                dayResume.setDiscountCode(item.getDiscountCode());
-            }
-            dayResume.setTypePayment(String.join(",", paymentsType));
-            dayResume.setValue(total);
-            dayResume.setQuantities(quantities);
-            */
-
-            listResume.add(dayResume);
         }
         Map<String, Object> result = new HashMap<>();
         result.put("items", listResume);

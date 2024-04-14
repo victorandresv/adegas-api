@@ -1,51 +1,70 @@
 package adegas.fago.models;
 
-import java.util.List;
-
 public class DayResume {
     private String phone;
-    private String address;
-    private List<DayResumeItems> items;
     private float total;
-
-    public float getTotal() {
-        return total;
-    }
+    private String paymentType;
+    private int quantity;
+    private String discountCode;
+    private String product;
 
     public void setTotal(float total) {
         this.total = total;
     }
 
-    public List<DayResumeItems> getItems() {
-        return items;
+    public String getProduct() {
+        return product;
     }
 
-    public void setItems(List<DayResumeItems> items) {
-        this.items = items;
+    public float getTotal() {
+        return total;
     }
 
-    @Override
-    public String toString() {
-        return "DayResume{" +
-                "phone='" + phone + '\'' +
-                ", address='" + address + '\'' +
-                ", items=" + items +
-                '}';
+    public String getPaymentType() {
+        return paymentType;
     }
 
-    public String getAddress() {
-        return address;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPaymentType(String paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public void setDiscountCode(String discountCode) {
+        this.discountCode = discountCode;
+    }
+
+    public String getDiscountCode() {
+        return discountCode;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
     public String getPhone() {
         return phone;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "DayResume{" +
+                "phone='" + phone + '\'' +
+                ", total=" + total +
+                ", paymentType='" + paymentType + '\'' +
+                ", quantity=" + quantity +
+                ", discountCode='" + discountCode + '\'' +
+                ", product='" + product + '\'' +
+                '}';
     }
 }
